@@ -17,12 +17,12 @@ sleep 5 # wait for mysqld_safe to rev up, and check for port 3306
 port_open=0
 
 while [ "$port_open" -eq 0 ]; do
-   /bin/nc -z -w 5 127.0.0.1 3306
+   /bin/nc -z -w 5 127.0.0.1 43775
    if [ $? -ne 0 ]; then
-       echo "Sleeping waiting for port 3306 to open: result " $? 
+       echo "Sleeping waiting for port 43775 to open: result " $? 
        sleep 1
    else
-       echo "Port 3306 is open"
+       echo "Port 43775 is open"
        port_open=1
    fi
 done

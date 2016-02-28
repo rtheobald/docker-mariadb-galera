@@ -1,16 +1,25 @@
 [mysql]
 
 # CLIENT #
-port                           = 3306
+port                           = 43775
 socket                         = /var/lib/mysql/mysql.sock
 
 [mysqld]
 
 # GENERAL #
+port                           = 43775
 user                           = mysql
 default-storage-engine         = InnoDB
 socket                         = /var/lib/mysql/mysql.sock
 pid-file                       = /var/lib/mysql/mysql.pid
+character-set-server           = utf8mb4
+collation-server               = utf8mb4_general_ci
+plugin_load                    = sql_errlog.so
+sql_error_log_filename         = /var/log/mysql/sql_err.log
+performance_schema             = 1
+event_scheduler                = 1
+lower_case_table_names         = 1
+
 
 # SSL #
 ssl-ca                         = /etc/ssl/mysql/ca.pem
@@ -29,17 +38,15 @@ sql-mode                       = STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,
 sysdate-is-now                 = 1
 innodb                         = FORCE
 innodb-strict-mode             = 1
-innodb-autoinc-lock-mode       = 2
-innodb-doublewrite             = 1
-innodb_flush_log_at_trx_commit = 2
-innodb_file_per_table          = 1
+innodb_locks_unsafe_for_binlog = 1
+innodb_autoinc_lock_mode       = 2
 
 # DATA STORAGE #
 datadir                        = /var/lib/mysql/
 
 # BINARY LOGGING #
 log-bin                        = /var/lib/mysql/mysql-bin
-expire-logs-days               = 2
+expire-logs-days               = 3
 sync-binlog                    = 1
 binlog-format                  = row
 
@@ -53,17 +60,36 @@ thread-cache-size              = 50
 open-files-limit               = 65535
 table-definition-cache         = 4096
 table-open-cache               = 4096
+group_concat_max_len           = 32767
+wait_timeout                   = 28800
+interactive_timeout            = 28800
+max_sp_recursion_depth         = 20
+auto_increment_increment       = 10
 
 # INNODB #
 innodb-flush-method            = O_DIRECT
 innodb-log-files-in-group      = 2
 innodb-log-file-size           = 128M
-innodb-flush-log-at-trx-commit = 1
+innodb-flush-log-at-trx-commit = 0
 innodb-file-per-table          = 1
 innodb-buffer-pool-size        = 128M
+innodb-log-buffer-size         = 8M
+innodb_open_files              = 65535
+innodb_adaptive_flushing       = 1
+innodb_adaptive_flushing_lwm   = 10
+innodb_flush_neighbors         = 1
+innodb_buffer_pool_dump_at_shutdown = 1
+innodb_buffer_pool_load_at_startup  = 1
+innodb_buffer_pool_instances   = 8
+innodb_file_format             = Barracuda
+innodb_file_format_max         = Barracuda
+innodb_max_dirty_pages_pct     = 80
+innodb_write_io_threads        = 4
+innodb_read_io_threads         = 4
 
 # LOGGING #
 log-error                      = /var/lib/mysql/mysql-error.log
 log-queries-not-using-indexes  = 1
 slow-query-log                 = 1
 slow-query-log-file            = /var/lib/mysql/mysql-slow.log
+long_query_time                = 2
